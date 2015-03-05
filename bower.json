@@ -1,0 +1,24 @@
+{
+    "name": "idealcart-js",
+    "version": "0.0.1",
+    "homepage": "https://github.com/ideallio/idealcart-js",
+    "authors": [
+        "Pa Essa Jabang <contactideallio@gmail.com>"
+    ],
+    "description": "A flexible and modern shopping cart library for your javascript projects.",
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ideallio/idealcart-js.git"
+    }
+}
