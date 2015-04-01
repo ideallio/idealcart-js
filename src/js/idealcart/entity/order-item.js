@@ -2,34 +2,34 @@ idealCart.orderItem = function (options) {
     "use strict";
     var primitives=  ['id', 'code', 'name', 'description', 'price', 'quantity', 'tax', 'taxRate'];
     var data = {};
-    data.options = {};
-    data.discounts = [];
+
     var _this = this;
 
+
     this.setPrice = function(_price) {
-        data['price'] = _price;
+        data['price'] = Number(_price);
         return this;
     }
 
     this.setQuantity = function(_quantity) {
-        data['quantity'] = _quantity;
+        data['quantity'] = parseInt(_quantity);
     }
 
-    function setAll(data) {
-        if(typeof data === 'object'  && data !== null) {
-            for (var k in data) {
-                if (data.hasOwnProperty(k)) {
-                    _this.set(k, data[k]);
+    function setAll(_data) {
+        setDefaults();
+        if(typeof _data === 'object'  && _data !== null) {
+            for (var k in _data) {
+                if (_data.hasOwnProperty(k)) {
+                    _this.set(k, _data[k]);
                 }
             }
         }
     }
 
     this.set = function(key, value) {
-        key = key.toLowerCase();
         var idx = primitives.indexOf(key);
 
-        var method = 'set' + idealCart._Util.Methods.ucfirst(key);
+        var method = 'set' + idealCart._Util.Methods.ucfirst(key.toLowerCase());
         if (typeof _this[method] !== 'undefined' && typeof _this[method] === 'function') {
             return _this[method](value);
         } else if (idx !== -1) {
@@ -69,15 +69,23 @@ idealCart.orderItem = function (options) {
     }
 
     this.serialize = function() {
-
+        return data;
     }
 
-    this.unserialize = function() {
+    function setDefaults() {
 
+        data.options = data.options || {};
+        data.discounts = data.discounts || [];
+    }
+
+    this.unserialize = function(_data) {
+        data = _data;
+        setDefaults();
+        return this;
     }
 
     this.getTotalIncludingTax = function() {
-        return this.getTotalExcludingTax()*this.getTotalTax();
+        return this.getTotalExcludingTax()+this.getTotalTax();
     }
 
     this.getTotalExcludingTax = function() {
@@ -102,6 +110,21 @@ idealCart.orderItem = function (options) {
             }
         }
 
+    }
+
+    /**
+     *
+     * @param type
+     * @returns {*}
+     */
+    this.format = function(type) {
+
+        var format = this.serialize();
+        format.totalIncludingTax = this.getTotalIncludingTax();
+        format.totalExcludingTax = this.getTotalExcludingTax();
+        format.totalDiscounts = this.getTotalDiscounts();
+        format.totalTax = this.getTotalTax();
+        return format;
     }
 
     setAll(options);

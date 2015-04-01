@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
 		watch = require('gulp-watch'),
-		// minifyJs = require('gulp-uglify'),
+		minifyJs = require('gulp-uglify'),
 		concat = require('gulp-concat'),
         karma = require('karma').server;;
 		argv = require('yargs').argv,
@@ -29,7 +29,9 @@ var paths = {
 
 gulp.task('compile-js', function() {
 	return gulp.src(paths.js)
-			// .pipe(minifyJs())
+            .pipe(concat('ideal-cart.js'))
+            .pipe(gulp.dest(paths.outputDir))
+			.pipe(minifyJs())
 			.pipe(concat('ideal-cart.min.js'))
 			.pipe(gulp.dest(paths.outputDir));
 });
